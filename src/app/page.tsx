@@ -14,7 +14,7 @@ export default function AdminDashboard() {
       try {
         const data = await getAnalytics();
         setAnalytics(data);
-      } catch (err) {
+      } catch {
         setError("Failed to load analytics");
       } finally {
         setLoading(false);
@@ -74,6 +74,72 @@ export default function AdminDashboard() {
             value={`${analytics.averageScore.toFixed(1)}%`}
           />
           <StatCard label="Certificates" value={analytics.totalCertificates} />
+        </div>
+
+        {/* Stats by District */}
+        <div className="bg-white rounded-lg shadow p-6 mb-8">
+          <h2 className="text-xl font-bold mb-4">Stats by District</h2>
+          {analytics.statsByDistrict.length === 0 ? (
+            <p className="text-gray-500 text-sm">No attempts yet.</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200 text-sm">
+                <thead>
+                  <tr className="bg-gray-50">
+                    <th className="px-4 py-2 text-left font-medium text-gray-700">District</th>
+                    <th className="px-4 py-2 text-left font-medium text-gray-700">Attempts</th>
+                    <th className="px-4 py-2 text-left font-medium text-gray-700">Passed</th>
+                    <th className="px-4 py-2 text-left font-medium text-gray-700">Avg Score %</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {analytics.statsByDistrict
+                    .sort((a, b) => b.totalAttempts - a.totalAttempts)
+                    .map((row) => (
+                      <tr key={row.district}>
+                        <td className="px-4 py-2 font-medium text-gray-900">{row.district}</td>
+                        <td className="px-4 py-2 text-gray-600">{row.totalAttempts}</td>
+                        <td className="px-4 py-2 text-gray-600">{row.passedCount}</td>
+                        <td className="px-4 py-2 text-gray-600">{row.averageScore.toFixed(1)}%</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+
+        {/* Stats by Age Group */}
+        <div className="bg-white rounded-lg shadow p-6 mb-8">
+          <h2 className="text-xl font-bold mb-4">Stats by Age Group</h2>
+          {analytics.statsByAgeGroup.length === 0 ? (
+            <p className="text-gray-500 text-sm">No attempts yet.</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200 text-sm">
+                <thead>
+                  <tr className="bg-gray-50">
+                    <th className="px-4 py-2 text-left font-medium text-gray-700">Age Group</th>
+                    <th className="px-4 py-2 text-left font-medium text-gray-700">Attempts</th>
+                    <th className="px-4 py-2 text-left font-medium text-gray-700">Passed</th>
+                    <th className="px-4 py-2 text-left font-medium text-gray-700">Avg Score %</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {analytics.statsByAgeGroup
+                    .sort((a, b) => b.totalAttempts - a.totalAttempts)
+                    .map((row) => (
+                      <tr key={row.ageGroup}>
+                        <td className="px-4 py-2 font-medium text-gray-900">{row.ageGroup}</td>
+                        <td className="px-4 py-2 text-gray-600">{row.totalAttempts}</td>
+                        <td className="px-4 py-2 text-gray-600">{row.passedCount}</td>
+                        <td className="px-4 py-2 text-gray-600">{row.averageScore.toFixed(1)}%</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
 
         {/* Question Difficulty */}
