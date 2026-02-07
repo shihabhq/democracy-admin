@@ -117,6 +117,9 @@ export default function QuestionsPage() {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-14">
+                  SL.
+                </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Question
                 </th>
@@ -132,8 +135,11 @@ export default function QuestionsPage() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {questions.map((question) => (
+              {questions.map((question, index) => (
                 <tr key={question.id}>
+                  <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    {index + 1}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">
                       {question.text.substring(0, 80)}
@@ -207,7 +213,7 @@ function QuestionForm({
     })) || [
       { text: "", isCorrect: false },
       { text: "", isCorrect: false },
-    ]
+    ],
   );
   const [saving, setSaving] = useState(false);
 
@@ -246,7 +252,7 @@ function QuestionForm({
   function updateOption(
     index: number,
     field: "text" | "isCorrect",
-    value: string | boolean
+    value: string | boolean,
   ) {
     const newOptions = [...options];
     if (field === "isCorrect" && value === true) {
@@ -292,7 +298,8 @@ function QuestionForm({
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Explanation <span className="text-gray-500 font-normal">(optional)</span>
+                Explanation{" "}
+                <span className="text-gray-500 font-normal">(optional)</span>
               </label>
               <textarea
                 value={explanation}
