@@ -13,6 +13,17 @@ export interface Question {
   }[];
 }
 
+export interface QuizAttempt {
+  id: string;
+  name: string;
+  district: string;
+  ageGroup: string;
+  score: number;
+  percentage: number;
+  passed: boolean;
+  createdAt: string;
+}
+
 export interface Analytics {
   totalAttempts: number;
   passedCount: number;
@@ -33,6 +44,18 @@ export interface Analytics {
     totalAnswers: number;
     correctAnswers: number;
     successRate: number;
+  }[];
+  statsByDistrict: {
+    district: string;
+    totalAttempts: number;
+    passedCount: number;
+    averageScore: number;
+  }[];
+  statsByAgeGroup: {
+    ageGroup: string;
+    totalAttempts: number;
+    passedCount: number;
+    averageScore: number;
   }[];
 }
 
@@ -97,6 +120,22 @@ export async function getAnalytics(): Promise<Analytics> {
   const response = await fetch(`${API_URL}/analytics`);
   if (!response.ok) {
     throw new Error("Failed to fetch analytics");
+  }
+  return response.json();
+}
+
+export async function getAttempts(filters?: {
+  district?: string;
+  ageGroup?: string;
+}): Promise<QuizAttempt[]> {
+  const params = new URLSearchParams();
+  if (filters?.district) params.set("district", filters.district);
+  if (filters?.ageGroup) params.set("ageGroup", filters.ageGroup);
+  const query = params.toString();
+  const url = query ? `${API_URL}/admin/attempts?${query}` : `${API_URL}/admin/attempts`;
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error("Failed to fetch attempts");
   }
   return response.json();
 }
