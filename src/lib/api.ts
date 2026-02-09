@@ -57,6 +57,12 @@ export interface Analytics {
     passedCount: number;
     averageScore: number;
   }[];
+  statsByGender: {
+    gender: string;
+    totalAttempts: number;
+    passedCount: number;
+    averageScore: number;
+  }[];
 }
 
 export async function getQuestions(): Promise<Question[]> {
@@ -92,7 +98,7 @@ export async function updateQuestion(
     explanation?: string;
     options?: { text: string; isCorrect: boolean }[];
     isActive?: boolean;
-  }
+  },
 ): Promise<Question> {
   const response = await fetch(`${API_URL}/admin/questions/${id}`, {
     method: "PUT",
@@ -132,7 +138,9 @@ export async function getAttempts(filters?: {
   if (filters?.district) params.set("district", filters.district);
   if (filters?.ageGroup) params.set("ageGroup", filters.ageGroup);
   const query = params.toString();
-  const url = query ? `${API_URL}/admin/attempts?${query}` : `${API_URL}/admin/attempts`;
+  const url = query
+    ? `${API_URL}/admin/attempts?${query}`
+    : `${API_URL}/admin/attempts`;
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error("Failed to fetch attempts");
