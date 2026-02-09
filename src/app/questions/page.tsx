@@ -91,13 +91,11 @@ export default function QuestionsPage() {
             Add Question
           </button>
         </div>
-
         {error && (
           <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
             {error}
           </div>
         )}
-
         {showForm && (
           <QuestionForm
             question={editingQuestion}
@@ -112,7 +110,6 @@ export default function QuestionsPage() {
             }}
           />
         )}
-
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">

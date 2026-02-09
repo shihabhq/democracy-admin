@@ -65,7 +65,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 mb-8">
           <StatCard label="Total Attempts" value={analytics.totalAttempts} />
           <StatCard label="Passed" value={analytics.passedCount} />
           <StatCard label="Failed" value={analytics.failedCount} />
@@ -74,6 +74,17 @@ export default function AdminDashboard() {
             value={`${analytics.averageScore.toFixed(1)}%`}
           />
           <StatCard label="Certificates" value={analytics.totalCertificates} />
+          <StatCard
+            label="By gender"
+            value={
+              (analytics.statsByGender ?? []).length === 0
+                ? "—"
+                : (analytics.statsByGender ?? [])
+                    .sort((a, b) => b.totalAttempts - a.totalAttempts)
+                    .map((r) => `${r.gender}: ${r.totalAttempts}`)
+                    .join(", ")
+            }
+          />
         </div>
 
         {/* Stats by District */}
@@ -131,6 +142,39 @@ export default function AdminDashboard() {
                     .map((row) => (
                       <tr key={row.ageGroup}>
                         <td className="px-4 py-2 font-medium text-gray-900">{row.ageGroup}</td>
+                        <td className="px-4 py-2 text-gray-600">{row.totalAttempts}</td>
+                        <td className="px-4 py-2 text-gray-600">{row.passedCount}</td>
+                        <td className="px-4 py-2 text-gray-600">{row.averageScore.toFixed(1)}%</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+
+        {/* Stats by Gender */}
+        <div className="bg-white rounded-lg shadow p-6 mb-8">
+          <h2 className="text-xl font-bold mb-4">Stats by Gender</h2>
+          {(analytics.statsByGender ?? []).length === 0 ? (
+            <p className="text-gray-500 text-sm">No attempts yet.</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200 text-sm">
+                <thead>
+                  <tr className="bg-gray-50">
+                    <th className="px-4 py-2 text-left font-medium text-gray-700">Gender</th>
+                    <th className="px-4 py-2 text-left font-medium text-gray-700">Attempts</th>
+                    <th className="px-4 py-2 text-left font-medium text-gray-700">Passed</th>
+                    <th className="px-4 py-2 text-left font-medium text-gray-700">Avg Score %</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {(analytics.statsByGender ?? [])
+                    .sort((a, b) => b.totalAttempts - a.totalAttempts)
+                    .map((row) => (
+                      <tr key={row.gender}>
+                        <td className="px-4 py-2 font-medium text-gray-900">{row.gender}</td>
                         <td className="px-4 py-2 text-gray-600">{row.totalAttempts}</td>
                         <td className="px-4 py-2 text-gray-600">{row.passedCount}</td>
                         <td className="px-4 py-2 text-gray-600">{row.averageScore.toFixed(1)}%</td>
